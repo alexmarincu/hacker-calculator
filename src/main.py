@@ -82,7 +82,6 @@ def main(page: ft.Page) -> None:
     page.window_min_height = 400
     page.window_width = 600
     page.window_height = 400
-    page.window_frameless = True
     page.window_always_on_top = True
     page.appbar = ft.AppBar(
         leading=ft.Container(
