@@ -110,8 +110,8 @@ def main(page: ft.Page) -> None:
     resultHexTextButton = ft.Ref[ft.TextButton]()
     resultBinaryTextButton = ft.Ref[ft.TextButton]()
 
-    def on_keyboard(e: ft.KeyboardEvent):
-        if e.key == "Escape":
+    def on_keyboard(ev: ft.KeyboardEvent):
+        if ev.key == "Escape":
             if expressionTextField.current.value != "":
                 expressionTextField.current.value = ""
                 expressionTextField.current.update()
@@ -121,8 +121,8 @@ def main(page: ft.Page) -> None:
                 page.window_close()
     page.on_keyboard_event = on_keyboard
 
-    def onResultClick(e: ft.ControlEvent) -> None:
-        pc.copy(e.control.text)
+    def onResultClick(ev: ft.ControlEvent) -> None:
+        pc.copy(ev.control.text)
 
     def clearAllResults() -> None:
         resultDecimalTextButton.current.text = "..."
@@ -135,10 +135,10 @@ def main(page: ft.Page) -> None:
         resultBinaryTextButton.current.text = ""
         page.update()
 
-    def onExpressionChange(e: ft.ControlEvent) -> None:
+    def onExpressionChange(ev: ft.ControlEvent) -> None:
         try:
             result = eval(
-                e.control.value, {"__builtins__": None}, safeTokenDict
+                ev.control.value, {"__builtins__": None}, safeTokenDict
             )
             resultDecimalTextButton.current.text = str(result)
             if isinstance(result, int) or result.is_integer():
