@@ -21,15 +21,15 @@
                     ". .pyvenv/bin/activate && flet pack src/main.py",
                     " --name HckrCalc",
                     " --icon assets/icon.png",
-                    " --add-data \"assets:assets\""
+                    " --add-data 'assets:assets'"
                 ],
             },
             "windows": {
                 "command": [
-                    ". .pyvenv/bin/activate && flet pack src/main.py", // todo update for windows
+                    ".pyvenv/Scripts/Activate.ps1; flet pack src/main.py",
                     " --name HckrCalc",
                     " --icon assets/icon.png",
-                    " --add-data \"assets:assets\""
+                    " --add-data 'assets;assets'"
                 ],
             },
             "group": "build"
@@ -44,7 +44,7 @@
                 "command": ". .pyvenv/bin/activate"
             },
             "windows": {
-                "command": ". .pyvenv/bin/activate" // todo update for windows
+                "command": ".pyvenv/Scripts/Activate.ps1"
             }
         },
         {
