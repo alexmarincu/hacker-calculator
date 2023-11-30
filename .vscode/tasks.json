@@ -22,9 +22,7 @@
                     " --name HckrCalc",
                     " --icon assets/icon.png",
                     " --add-data 'assets:.'",
-                    " --onedir",
-                    " --product-name 'Hacker Calculator'",
-                    " --product-version '1.0.0'"
+                    " --onedir"
                 ],
             },
             "windows": {
@@ -34,8 +32,11 @@
                     " --icon assets/icon.png",
                     " --add-data 'assets;.'",
                     " --onedir",
-                    " --product-name 'Hacker Calculator'",
-                    " --product-version '1.0.0'"
+                    " --file-description '${config:appName}'",
+                    " --file-version '${config:appVersion}'",
+                    " --product-name '${config:appName}'",
+                    " --product-version '${config:appVersion}'",
+                    " --copyright 'Copyright (c) 2023 Alex Marincu'"
                 ],
             },
             "group": "build"
