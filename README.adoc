@@ -15,7 +15,7 @@ This calculator allows users to input mathematical expressions. If the result is
 Simply enter your mathematical expression and get the calculated result along with its hexadecimal and binary representations if it's an integer.
 
 .Usage Example
-image::usage-example.png[Usage example]
+image::usage-example.png[alt=Usage example, width=500]
 
 `Esc` key will clear the input field and prepare focus to enter a new expression.
 `Esc` key will also exit the app if the expression field is empty.
