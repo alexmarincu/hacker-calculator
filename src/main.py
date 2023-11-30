@@ -3,7 +3,6 @@ import os
 import flet as ft
 import pyperclip as pc
 from math import *
-import webbrowser
 
 
 def main(page: ft.Page) -> None:
@@ -93,6 +92,7 @@ def main(page: ft.Page) -> None:
     page.window_frameless = True
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
+    page.scroll = ft.ScrollMode.AUTO
     page.appbar = ft.AppBar(
         leading=ft.Container(
             content=ft.Image(src=assetsPath("icon.png")),
@@ -105,8 +105,7 @@ def main(page: ft.Page) -> None:
         actions=[
             ft.IconButton(
                 ft.icons.INFO,
-                on_click=lambda e:
-                webbrowser.open(
+                on_click=lambda _: page.launch_url(
                     'https://github.com/alexmarincu/hacker-calculator'
                 )
             ),
