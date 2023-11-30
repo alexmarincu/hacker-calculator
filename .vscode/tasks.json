@@ -21,7 +21,7 @@
                     ". .pyvenv/bin/activate && flet pack src/main.py",
                     " --name HckrCalc",
                     " --icon assets/icon.png",
-                    " --add-data 'assets:assets'"
+                    " --add-data 'assets:.'"
                 ],
             },
             "windows": {
@@ -29,7 +29,7 @@
                     ".pyvenv/Scripts/Activate.ps1; flet pack src/main.py",
                     " --name HckrCalc",
                     " --icon assets/icon.png",
-                    " --add-data 'assets;assets'"
+                    " --add-data 'assets;.'"
                 ],
             },
             "group": "build"
