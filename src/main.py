@@ -82,6 +82,20 @@ def main(page: ft.Page) -> None:
             getattr(sys, '_MEIPASS', os.path.abspath('assets')), relativePath
         )
 
+    def onMaximizeButtonClick(ev: ft.ControlEvent) -> None:
+        page.window_maximized = not page.window_maximized
+        page.update()
+
+    def onMinimizeButtonClick(ev: ft.ControlEvent) -> None:
+        page.window_minimized = True
+        page.update()
+
+    def onCloseButtonClick(ev: ft.ControlEvent) -> None:
+        page.window_close()
+
+    def onInfoButtonClick(ev: ft.ControlEvent) -> None:
+        page.launch_url('https://github.com/alexmarincu/hacker-calculator')
+
     page.title = "Hacker Calculator"
     page.theme_mode = ft.ThemeMode.DARK
     page.window_min_width = 600
@@ -89,14 +103,15 @@ def main(page: ft.Page) -> None:
     page.window_width = 600
     page.window_height = 400
     page.window_always_on_top = True
-    page.window_frameless = True
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
     page.scroll = ft.ScrollMode.AUTO
     page.appbar = ft.AppBar(
-        leading=ft.Container(
-            content=ft.Image(src=assetsPath("icon.png")),
-            padding=ft.padding.only(left=20)
+        leading=ft.WindowDragArea(
+            content=ft.Container(
+                content=ft.Image(src=assetsPath("icon.png"), scale=0.7),
+                padding=ft.padding.only(left=10),
+            ),
         ),
         bgcolor='#202324',
         title=ft.WindowDragArea(
@@ -105,16 +120,42 @@ def main(page: ft.Page) -> None:
         actions=[
             ft.IconButton(
                 ft.icons.INFO,
-                on_click=lambda _: page.launch_url(
-                    'https://github.com/alexmarincu/hacker-calculator'
+                on_click=onInfoButtonClick
+            ),
+            ft.IconButton(
+                ft.icons.MINIMIZE,
+                scale=0.8,
+                on_click=onMinimizeButtonClick,
+                style=ft.ButtonStyle(
+                    shape={
+                        ft.MaterialState.DEFAULT:
+                        ft.RoundedRectangleBorder(radius=2),
+                    },
+                )
+            ),
+            ft.IconButton(
+                ft.icons.SQUARE_OUTLINED,
+                scale=0.8,
+                on_click=onMaximizeButtonClick,
+                style=ft.ButtonStyle(
+                    shape={
+                        ft.MaterialState.DEFAULT:
+                        ft.RoundedRectangleBorder(radius=2),
+                    },
                 )
             ),
             ft.IconButton(
                 ft.icons.CLOSE,
-                on_click=lambda _: page.window_close()
+                scale=0.8,
+                on_click=onCloseButtonClick,
+                style=ft.ButtonStyle(
+                    shape={
+                        ft.MaterialState.DEFAULT:
+                        ft.RoundedRectangleBorder(radius=2),
+                    },
+                )
             ),
-            ft.VerticalDivider(width=15, color=ft.colors.TRANSPARENT),
-
+            ft.VerticalDivider(width=10, color=ft.colors.TRANSPARENT)
         ],
     )
     page.fonts = {
