@@ -291,7 +291,7 @@ def main(page: ft.Page) -> None:
                             )
                         ]
                     ),
-                    ft.Text(value="v0.1.0", size=10)
+                    ft.Text(value="v0.2.0", size=10)
                 ]
             )
         )
