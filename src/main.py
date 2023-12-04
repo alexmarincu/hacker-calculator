@@ -99,64 +99,64 @@ def main(page: ft.Page) -> None:
     page.title = "Hacker Calculator"
     page.theme_mode = ft.ThemeMode.DARK
     page.window_min_width = 600
-    page.window_min_height = 400
+    page.window_min_height = 320
     page.window_width = 600
-    page.window_height = 400
+    page.window_height = 320
     page.window_always_on_top = True
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
-    page.scroll = ft.ScrollMode.AUTO
     page.appbar = ft.AppBar(
         leading=ft.WindowDragArea(
             content=ft.Container(
-                content=ft.Image(src=assetsPath("icon.png"), scale=0.7),
                 padding=ft.padding.only(left=10),
+                content=ft.Image(src=assetsPath("icon.png"), scale=0.7)
             ),
         ),
         bgcolor='#202324',
         title=ft.WindowDragArea(
-            content=ft.Text("Hacker Calculator"), expand=True
+            expand=True,
+            content=ft.Text("Hacker Calculator")
         ),
         actions=[
             ft.IconButton(
-                ft.icons.INFO,
+                icon=ft.icons.INFO,
                 on_click=onInfoButtonClick
             ),
             ft.IconButton(
-                ft.icons.MINIMIZE,
+                icon=ft.icons.MINIMIZE,
                 scale=0.8,
-                on_click=onMinimizeButtonClick,
                 style=ft.ButtonStyle(
                     shape={
                         ft.MaterialState.DEFAULT:
                         ft.RoundedRectangleBorder(radius=2),
                     },
-                )
+                ),
+                on_click=onMinimizeButtonClick
             ),
             ft.IconButton(
-                ft.icons.SQUARE_OUTLINED,
+                icon=ft.icons.SQUARE_OUTLINED,
                 scale=0.8,
-                on_click=onMaximizeButtonClick,
                 style=ft.ButtonStyle(
                     shape={
                         ft.MaterialState.DEFAULT:
                         ft.RoundedRectangleBorder(radius=2),
                     },
-                )
+                ),
+                on_click=onMaximizeButtonClick
             ),
             ft.IconButton(
-                ft.icons.CLOSE,
+                icon=ft.icons.CLOSE,
                 scale=0.8,
-                on_click=onCloseButtonClick,
                 style=ft.ButtonStyle(
                     shape={
                         ft.MaterialState.DEFAULT:
                         ft.RoundedRectangleBorder(radius=2),
                     },
-                )
+                ),
+                on_click=onCloseButtonClick
             ),
             ft.VerticalDivider(width=10, color=ft.colors.TRANSPARENT)
-        ],
+        ]
     )
     page.fonts = {
         "JetBrainsMono NF":
@@ -164,17 +164,22 @@ def main(page: ft.Page) -> None:
     }
     page.theme = ft.Theme(font_family="JetBrainsMono NF")
     expressionTextField = ft.Ref[ft.TextField]()
+    expressionTextFieldFocused = False
     resultDecimalTextButton = ft.Ref[ft.TextButton]()
     resultHexTextButton = ft.Ref[ft.TextButton]()
     resultBinaryTextButton = ft.Ref[ft.TextButton]()
 
+    def resetInput() -> None:
+        expressionTextField.current.value = ""
+        expressionTextField.current.update()
+        clearAllResults()
+        expressionTextField.current.focus()
+
     def onKey(ev: ft.KeyboardEvent):
         if ev.key == "Escape":
-            if expressionTextField.current.value != "":
-                expressionTextField.current.value = ""
-                expressionTextField.current.update()
-                clearAllResults()
-                expressionTextField.current.focus()
+            if (expressionTextField.current.value != "")\
+                    or (not expressionTextFieldFocused):
+                resetInput()
             else:
                 page.window_close()
     page.on_keyboard_event = onKey
@@ -184,14 +189,22 @@ def main(page: ft.Page) -> None:
 
     def clearAllResults() -> None:
         resultDecimalTextButton.current.text = "..."
+        resultDecimalTextButton.current.disabled = True
+        resultDecimalTextButton.current.update()
         resultHexTextButton.current.text = ""
+        resultHexTextButton.current.disabled = True
+        resultHexTextButton.current.update()
         resultBinaryTextButton.current.text = ""
-        page.update()
+        resultBinaryTextButton.current.disabled = True
+        resultBinaryTextButton.current.update()
 
     def clearHexBinResults() -> None:
         resultHexTextButton.current.text = ""
+        resultHexTextButton.current.disabled = True
+        resultHexTextButton.current.update()
         resultBinaryTextButton.current.text = ""
-        page.update()
+        resultBinaryTextButton.current.disabled = True
+        resultBinaryTextButton.current.update()
 
     def onExpressionChange(ev: ft.ControlEvent) -> None:
         try:
@@ -199,61 +212,87 @@ def main(page: ft.Page) -> None:
                 ev.control.value, {"__builtins__": None}, safeTokenDict
             )
             resultDecimalTextButton.current.text = str(result)
+            resultDecimalTextButton.current.disabled = False
+            resultDecimalTextButton.current.update()
             if isinstance(result, int) or result.is_integer():
                 resultInt = int(result)
                 resultHexTextButton.current.text = str(hex(resultInt))
+                resultHexTextButton.current.disabled = False
+                resultHexTextButton.current.update()
                 resultBinaryTextButton.current.text = str(bin(resultInt))
-                page.update()
+                resultBinaryTextButton.current.disabled = False
+                resultBinaryTextButton.current.update()
             else:
                 clearHexBinResults()
         except Exception as e:
             clearAllResults()
 
+    def onExpressionFocus(ev: ft.ControlEvent) -> None:
+        nonlocal expressionTextFieldFocused
+        expressionTextFieldFocused = True
+
+    def onExpressionBlur(ev: ft.ControlEvent) -> None:
+        nonlocal expressionTextFieldFocused
+        expressionTextFieldFocused = False
+
     page.add(
         ft.Container(
+            expand=True,
             padding=20,
             content=ft.Column(
                 controls=[
                     ft.TextField(
                         ref=expressionTextField,
                         label="Expression",
-                        on_change=onExpressionChange
+                        on_change=onExpressionChange,
+                        on_focus=onExpressionFocus,
+                        on_blur=onExpressionBlur
                     ),
-                    ft.TextButton(
-                        ref=resultDecimalTextButton,
-                        text="...",
-                        on_click=onResultClick,
-                        style=ft.ButtonStyle(
-                            shape={
-                                ft.MaterialState.DEFAULT:
-                                ft.RoundedRectangleBorder(radius=2),
-                            },
-                        )
+                    ft.Column(
+                        scroll=ft.ScrollMode.AUTO,
+                        horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
+                        expand=True,
+                        controls=[
+                            ft.TextButton(
+                                ref=resultDecimalTextButton,
+                                text="...",
+                                disabled=True,
+                                style=ft.ButtonStyle(
+                                    shape={
+                                        ft.MaterialState.DEFAULT:
+                                        ft.RoundedRectangleBorder(radius=2),
+                                    },
+                                ),
+                                on_click=onResultClick
+                            ),
+                            ft.TextButton(
+                                ref=resultHexTextButton,
+                                text="",
+                                disabled=True,
+                                style=ft.ButtonStyle(
+                                    shape={
+                                        ft.MaterialState.DEFAULT:
+                                        ft.RoundedRectangleBorder(radius=2),
+                                    },
+                                ),
+                                on_click=onResultClick
+                            ),
+                            ft.TextButton(
+                                ref=resultBinaryTextButton,
+                                text="",
+                                disabled=True,
+                                style=ft.ButtonStyle(
+                                    shape={
+                                        ft.MaterialState.DEFAULT:
+                                        ft.RoundedRectangleBorder(radius=2),
+                                    },
+                                ),
+                                on_click=onResultClick
+                            )
+                        ]
                     ),
-                    ft.TextButton(
-                        ref=resultHexTextButton,
-                        text="",
-                        on_click=onResultClick,
-                        style=ft.ButtonStyle(
-                            shape={
-                                ft.MaterialState.DEFAULT:
-                                ft.RoundedRectangleBorder(radius=2),
-                            },
-                        )
-                    ),
-                    ft.TextButton(
-                        ref=resultBinaryTextButton,
-                        text="",
-                        on_click=onResultClick,
-                        style=ft.ButtonStyle(
-                            shape={
-                                ft.MaterialState.DEFAULT:
-                                ft.RoundedRectangleBorder(radius=2),
-                            },
-                        )
-                    )
-                ],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                    ft.Text(value="v0.1.0", size=10)
+                ]
             )
         )
     )
