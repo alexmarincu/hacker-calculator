@@ -17,9 +17,9 @@ Simply enter your mathematical expression and get the calculated result along wi
 .Usage Example
 image::usage-example.png[alt=Usage example, width=500]
 
-[TIP]
-`Esc` key will clear the input field and prepare focus to enter a new expression.
-`Esc` key will also exit the app if the expression field is empty.
+Click on one of the results to copy the value to clipboard.
+
+`Esc` key will clear the input field and prepare focus to enter a new expression. `Esc` key will also exit the app if the expression field is focused and empty.
 
 == Installation:
 Download the https://github.com/alexmarincu/hacker-calculator/releases[release] for your platform (windows / linux), unzip and run the app.
