@@ -1,5 +1,3 @@
-import sys
-import os
 import flet as ft
 import pyperclip as pc
 from math import *
@@ -77,11 +75,6 @@ def main(page: ft.Page) -> None:
     safeTokenDict['max'] = max
     safeTokenDict['round'] = round
 
-    def assetsPath(relativePath) -> str:
-        return os.path.join(
-            getattr(sys, '_MEIPASS', os.path.abspath('assets')), relativePath
-        )
-
     def onMaximizeButtonClick(ev: ft.ControlEvent) -> None:
         page.window_maximized = not page.window_maximized
         page.update()
@@ -109,7 +102,7 @@ def main(page: ft.Page) -> None:
         leading=ft.WindowDragArea(
             content=ft.Container(
                 padding=ft.padding.only(left=10),
-                content=ft.Image(src=assetsPath("icon.png"), scale=0.7)
+                content=ft.Image(src="icon.png", scale=0.7)
             ),
         ),
         bgcolor='#202324',
@@ -160,7 +153,7 @@ def main(page: ft.Page) -> None:
     )
     page.fonts = {
         "JetBrainsMono NF":
-        assetsPath("fonts/JetBrainsMonoNerdFont-Regular.ttf"),
+        "fonts/JetBrainsMonoNerdFont-Regular.ttf",
     }
     page.theme = ft.Theme(font_family="JetBrainsMono NF")
     expressionTextField = ft.Ref[ft.TextField]()
@@ -301,4 +294,4 @@ def main(page: ft.Page) -> None:
 
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main, assets_dir="assets")
