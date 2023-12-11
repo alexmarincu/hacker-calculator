@@ -1,25 +1,32 @@
 = Hacker Calculator
-:imagesdir: media
+:imagesdir: readme_assets
+:tip-caption: :bulb:
 
 The Hacker Calculator is a Python-based tool made with https://flet.dev/[Flet] that evaluates expressions and provides hexadecimal and binary representations for integer results.
 
 == Features:
+
 * Expression Evaluation: Enter mathematical expressions to get quick results.
 * Integer Conversion: If the result is an integer, the calculator displays its hexadecimal and binary equivalents.
 * User-Friendly Interface: Simple and intuitive interface for seamless calculation.
 
 == How it works:
+
 This calculator allows users to input mathematical expressions. If the result is an integer, the tool also displays the hexadecimal and binary representations, catering to the needs of programmers.
 
 == Usage:
+
 Simply enter your mathematical expression and get the calculated result along with its hexadecimal and binary representations if it's an integer.
 
 .Usage Example
 image::usage-example.png[alt=Usage example, width=500]
 
+[TIP]
+====
 Click on one of the results to copy the value to clipboard.
 
 `Esc` key will clear the input field and prepare focus to enter a new expression. `Esc` key will also exit the app if the expression field is focused and empty.
+====
 
 == Installation:
 Download the https://github.com/alexmarincu/hacker-calculator/releases[release] for your platform (windows / linux), unzip and run the app.
