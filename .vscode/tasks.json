@@ -41,7 +41,7 @@
                     " --product-version '${config:appVersion}'",
                     " --copyright 'Copyright (c) 2023 Alex Marincu'",
                     "; Move-Item -Path \"dist/HckrCalc/_internal/assets\"",
-                    " -Destination \"dist/HckrCalc/assets\" -Force -Recurse"
+                    " -Destination \"dist/HckrCalc/assets\""
                 ],
             },
             "group": "build"
