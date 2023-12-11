@@ -1,6 +1,6 @@
 = Hacker Calculator
 :imagesdir: readme_assets
-:icons: font
+:tip-caption: :bulb:
 
 The Hacker Calculator is a Python-based tool made with https://flet.dev/[Flet] that evaluates expressions and provides hexadecimal and binary representations for integer results.
 
