@@ -1,79 +1,11 @@
 import flet as ft
 import pyperclip as pc
-from math import *
+
+from ExpressionEvaluator import ExpressionEvaluator
+from Result import Failure, Success
 
 
 def main(page: ft.Page) -> None:
-    safeTokenList = [
-        # math
-        'e',
-        'pi',
-        'inf',
-        'nan',
-        'tau',
-        'acos',
-        'acosh',
-        'asin',
-        'asinh',
-        'atan',
-        'atan2',
-        'atanh',
-        'cbrt',
-        'ceil',
-        'comb',
-        'copysign',
-        'cos',
-        'cosh',
-        'degrees',
-        'dist',
-        'erf',
-        'erfc',
-        'exp',
-        'exp2',
-        'expm1',
-        'fabs',
-        'factorial',
-        'floor',
-        'fmod',
-        'frexp',
-        'fsum',
-        'gamma',
-        'gcd',
-        'hypot',
-        'isclose',
-        'isinf',
-        'isfinite',
-        'isnan',
-        'isqrt',
-        'lcm',
-        'ldexp',
-        'lgamma',
-        'log',
-        'log10',
-        'log1p',
-        'log2',
-        'modf',
-        'nextafter',
-        'perm',
-        'pow',
-        'prod',
-        'radians',
-        'remainder',
-        'sin',
-        'sinh',
-        'sumprod',
-        'sqrt',
-        'tan',
-        'tanh',
-        'trunc',
-    ]
-    safeTokenDict = dict(
-        [(k, globals().get(k, None)) for k in safeTokenList]
-    )
-    safeTokenDict['abs'] = abs
-    safeTokenDict['min'] = min
-    safeTokenDict['max'] = max
-    safeTokenDict['round'] = round
 
     def onMaximizeButtonClick(ev: ft.ControlEvent) -> None:
         page.window_maximized = not page.window_maximized
@@ -200,25 +132,24 @@ def main(page: ft.Page) -> None:
         resultBinaryTextButton.current.update()
 
     def onExpressionChange(ev: ft.ControlEvent) -> None:
-        try:
-            result = eval(
-                ev.control.value, {"__builtins__": None}, safeTokenDict
-            )
-            resultDecimalTextButton.current.text = str(result)
-            resultDecimalTextButton.current.disabled = False
-            resultDecimalTextButton.current.update()
-            if isinstance(result, int) or result.is_integer():
-                resultInt = int(result)
-                resultHexTextButton.current.text = str(hex(resultInt))
-                resultHexTextButton.current.disabled = False
-                resultHexTextButton.current.update()
-                resultBinaryTextButton.current.text = str(bin(resultInt))
-                resultBinaryTextButton.current.disabled = False
-                resultBinaryTextButton.current.update()
-            else:
-                clearHexBinResults()
-        except Exception as e:
-            clearAllResults()
+        result = ExpressionEvaluator().eval(ev.control.value)
+        match result:
+            case Success(value=value):
+                resultDecimalTextButton.current.text = str(value)
+                resultDecimalTextButton.current.disabled = False
+                resultDecimalTextButton.current.update()
+                if value.is_integer():
+                    resultInt = int(value)
+                    resultHexTextButton.current.text = str(hex(resultInt))
+                    resultHexTextButton.current.disabled = False
+                    resultHexTextButton.current.update()
+                    resultBinaryTextButton.current.text = str(bin(resultInt))
+                    resultBinaryTextButton.current.disabled = False
+                    resultBinaryTextButton.current.update()
+                else:
+                    clearHexBinResults()
+            case Failure(errorMessage=errorMessage):
+                clearAllResults()
 
     def onExpressionFocus(ev: ft.ControlEvent) -> None:
         nonlocal expressionTextFieldFocused
