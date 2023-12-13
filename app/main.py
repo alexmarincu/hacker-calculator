@@ -1,8 +1,8 @@
 import flet as ft
 import pyperclip as pc
 
-from ExpressionEvaluator import ExpressionEvaluator
-from Result import Failure, Success
+import expression_eval as ee
+import utils as ut
 
 
 def main(page: ft.Page) -> None:
@@ -132,9 +132,9 @@ def main(page: ft.Page) -> None:
         resultBinaryTextButton.current.update()
 
     def onExpressionChange(ev: ft.ControlEvent) -> None:
-        result = ExpressionEvaluator().eval(ev.control.value)
+        result = ee.ExpressionEvaluator().eval(ev.control.value)
         match result:
-            case Success(value=value):
+            case ut.Success(value=value):
                 resultDecimalTextButton.current.text = str(value)
                 resultDecimalTextButton.current.disabled = False
                 resultDecimalTextButton.current.update()
@@ -148,7 +148,7 @@ def main(page: ft.Page) -> None:
                     resultBinaryTextButton.current.update()
                 else:
                     clearHexBinResults()
-            case Failure(errorMessage=errorMessage):
+            case ut.Failure(errorMessage=errorMessage):
                 clearAllResults()
 
     def onExpressionFocus(ev: ft.ControlEvent) -> None:

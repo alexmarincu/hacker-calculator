@@ -1,5 +1,5 @@
 from math import *
-from Result import Result, Failure, Success
+import utils as ut
 
 
 class ExpressionEvaluator:
@@ -77,10 +77,10 @@ class ExpressionEvaluator:
     def __init__(self) -> None:
         pass
 
-    def eval(self, expression: str) -> Result:
-        result: Result
+    def eval(self, expression: str) -> ut.Result:
+        result: ut.Result
         try:
-            result = Success(
+            result = ut.Success(
                 float(
                     eval(
                         expression, {"__builtins__": None},
@@ -88,5 +88,5 @@ class ExpressionEvaluator:
                 )
             )
         except Exception as e:
-            result = Failure("Invalid expression")
+            result = ut.Failure("Invalid expression")
         return result
