@@ -21,28 +21,28 @@
                     ". .pyvenv/bin/activate",
                     " && flet pack app/main.py",
                     " --name HckrCalc",
-                    " --icon app/assets/icon.png",
-                    " --add-data 'app/assets:assets'",
+                    " --icon app/ui/assets/icon.png",
+                    " --add-data 'app/ui/assets:ui/assets'",
                     " --onedir",
-                    " && mv dist/HckrCalc/_internal/assets dist/HckrCalc/assets",
-                ],
+                    " && mv dist/HckrCalc/_internal/ui dist/HckrCalc/ui",
+                ]
             },
             "windows": {
                 "command": [
                     ".pyvenv/Scripts/Activate.ps1",
                     " ; flet pack app/main.py",
                     " --name HckrCalc",
-                    " --icon app/assets/icon.png",
-                    " --add-data 'app/assets;assets'",
+                    " --icon app/ui/assets/icon.png",
+                    " --add-data 'app/ui/assets;ui/assets'",
                     " --onedir",
                     " --file-description '${config:appName}'",
                     " --file-version '${config:appVersion}'",
                     " --product-name '${config:appName}'",
                     " --product-version '${config:appVersion}'",
                     " --copyright 'Copyright (c) 2023 Alex Marincu'",
-                    "; Move-Item -Path \"dist/HckrCalc/_internal/assets\"",
-                    " -Destination \"dist/HckrCalc/assets\""
-                ],
+                    "; Move-Item -Path \"dist/HckrCalc/_internal/ui\"",
+                    " -Destination \"dist/HckrCalc/ui\""
+                ]
             },
             "group": "build"
         },

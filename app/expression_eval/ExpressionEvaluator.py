@@ -1,4 +1,4 @@
-from math import *
+from math import *  # noqa: E501, F403, F401 # pyright: ignore[reportWildcardImportFromLibrary]
 import utils as ut
 
 
@@ -88,5 +88,5 @@ class ExpressionEvaluator:
                 )
             )
         except Exception as e:
-            result = ut.Failure("Invalid expression")
+            result = ut.Failure(str(e))
         return result
