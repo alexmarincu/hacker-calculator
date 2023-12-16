@@ -1,127 +1,103 @@
 import flet as ft
-import pyperclip as pc
-
-import expression_eval as ee
-import utils as ut
+from .AppLayout import AppLayout
 
 
-class App(ft.Container):
-    def __init__(self):
-        super().__init__()
-        self.expressionTextField = ft.Ref[ft.TextField]()
-        self.expressionTextFieldFocused = False
-        self.resultDecimalTextButton = ft.Ref[ft.TextButton]()
-        self.resultHexTextButton = ft.Ref[ft.TextButton]()
-        self.resultBinaryTextButton = ft.Ref[ft.TextButton]()
-        self.padding = 20
-        self.expand = True
-        self.content = ft.Column(
-            controls=[
-                ft.TextField(
-                    ref=self.expressionTextField,
-                    label="Expression",
-                    on_change=self._onExpressionChange,
-                    on_focus=self._onExpressionFocus,
-                    on_blur=self._onExpressionBlur
+class App():
+    def __init__(self, page: ft.Page) -> None:
+        self.page = page
+        page.title = "Hacker Calculator"
+        page.theme_mode = ft.ThemeMode.DARK
+        page.window_min_width = 600
+        page.window_min_height = 400
+        page.window_width = 600
+        page.window_height = 400
+        page.window_always_on_top = True
+        page.window_title_bar_hidden = True
+        page.window_title_bar_buttons_hidden = True
+        page.appbar = ft.AppBar(
+            leading=ft.WindowDragArea(
+                content=ft.Container(
+                    padding=ft.padding.only(left=10),
+                    content=ft.Image(src="icon.png", scale=0.7)
                 ),
-                ft.Column(
-                    scroll=ft.ScrollMode.AUTO,
-                    horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
-                    expand=True,
-                    controls=[
-                        ft.TextButton(
-                            ref=self.resultDecimalTextButton,
-                            text="...",
-                            disabled=True,
-                            style=ft.ButtonStyle(
-                                shape={
-                                    ft.MaterialState.DEFAULT:
-                                    ft.RoundedRectangleBorder(radius=2),
-                                },
-                            ),
-                            on_click=self._onResultClick
-                        ),
-                        ft.TextButton(
-                            ref=self.resultHexTextButton,
-                            text="",
-                            disabled=True,
-                            style=ft.ButtonStyle(
-                                shape={
-                                    ft.MaterialState.DEFAULT:
-                                    ft.RoundedRectangleBorder(radius=2),
-                                },
-                            ),
-                            on_click=self._onResultClick
-                        ),
-                        ft.TextButton(
-                            ref=self.resultBinaryTextButton,
-                            text="",
-                            disabled=True,
-                            style=ft.ButtonStyle(
-                                shape={
-                                    ft.MaterialState.DEFAULT:
-                                    ft.RoundedRectangleBorder(radius=2),
-                                },
-                            ),
-                            on_click=self._onResultClick
-                        )
-                    ]
+            ),
+            bgcolor='#202324',
+            title=ft.WindowDragArea(
+                expand=True,
+                content=ft.Text("Hacker Calculator")
+            ),
+            actions=[
+                ft.IconButton(
+                    icon=ft.icons.INFO,
+                    on_click=self._onInfoButtonClick
                 ),
-                ft.Text(value="v0.2.0", size=10)
+                ft.IconButton(
+                    icon=ft.icons.MINIMIZE,
+                    scale=0.8,
+                    style=ft.ButtonStyle(
+                        shape={
+                            ft.MaterialState.DEFAULT:
+                            ft.RoundedRectangleBorder(radius=2),
+                        },
+                    ),
+                    on_click=self._onMinimizeButtonClick
+                ),
+                ft.IconButton(
+                    icon=ft.icons.SQUARE_OUTLINED,
+                    scale=0.8,
+                    style=ft.ButtonStyle(
+                        shape={
+                            ft.MaterialState.DEFAULT:
+                            ft.RoundedRectangleBorder(radius=2),
+                        },
+                    ),
+                    on_click=self._onMaximizeButtonClick
+                ),
+                ft.IconButton(
+                    icon=ft.icons.CLOSE,
+                    scale=0.8,
+                    style=ft.ButtonStyle(
+                        shape={
+                            ft.MaterialState.DEFAULT:
+                            ft.RoundedRectangleBorder(radius=2),
+                        },
+                    ),
+                    on_click=self._onCloseButtonClick
+                ),
+                ft.VerticalDivider(width=10, color=ft.colors.TRANSPARENT)
             ]
         )
+        page.fonts = {
+            "JetBrainsMono NF":
+            "fonts/JetBrainsMonoNerdFont-Regular.ttf",
+        }
+        page.theme = ft.Theme(font_family="JetBrainsMono NF")
+        page.on_keyboard_event = self._onKey
+        self.appLayout = AppLayout()
+        page.add(self.appLayout)
+        self.page.window_center()
+        self.appLayout.expressionTextField.current.focus()
 
-    def resetInput(self) -> None:
-        self.expressionTextField.current.value = ""
-        self.expressionTextField.current.update()
-        self._clearAllResults()
-        self.expressionTextField.current.focus()
+    def _onMaximizeButtonClick(self, _) -> None:
+        self.page.window_maximized = not self.page.window_maximized
+        self.page.update()
 
-    def _onResultClick(self, ev: ft.ControlEvent) -> None:
-        pc.copy(ev.control.text)
+    def _onMinimizeButtonClick(self, _) -> None:
+        self.page.window_minimized = True
+        self.page.update()
 
-    def _clearAllResults(self) -> None:
-        self.resultDecimalTextButton.current.text = "..."
-        self.resultDecimalTextButton.current.disabled = True
-        self.resultDecimalTextButton.current.update()
-        self.resultHexTextButton.current.text = ""
-        self.resultHexTextButton.current.disabled = True
-        self.resultHexTextButton.current.update()
-        self.resultBinaryTextButton.current.text = ""
-        self.resultBinaryTextButton.current.disabled = True
-        self.resultBinaryTextButton.current.update()
+    def _onCloseButtonClick(self, _) -> None:
+        self.page.window_close()
 
-    def _clearHexBinResults(self) -> None:
-        self.resultHexTextButton.current.text = ""
-        self.resultHexTextButton.current.disabled = True
-        self.resultHexTextButton.current.update()
-        self.resultBinaryTextButton.current.text = ""
-        self.resultBinaryTextButton.current.disabled = True
-        self.resultBinaryTextButton.current.update()
+    def _onInfoButtonClick(self, _) -> None:
+        self.page.launch_url(
+            'https://github.com/alexmarincu/hacker-calculator'
+        )
 
-    def _onExpressionChange(self, ev: ft.ControlEvent) -> None:
-        result = ee.ExpressionEvaluator().eval(ev.control.value)
-        match result:
-            case ut.Success(value=value):
-                self.resultDecimalTextButton.current.text = str(value)
-                self.resultDecimalTextButton.current.disabled = False
-                self.resultDecimalTextButton.current.update()
-                if value.is_integer():
-                    resultInt = int(value)
-                    self.resultHexTextButton.current.text = str(hex(resultInt))
-                    self.resultHexTextButton.current.disabled = False
-                    self.resultHexTextButton.current.update()
-                    self.resultBinaryTextButton.current.text = str(
-                        bin(resultInt))
-                    self.resultBinaryTextButton.current.disabled = False
-                    self.resultBinaryTextButton.current.update()
-                else:
-                    self._clearHexBinResults()
-            case ut.Failure(errorMessage=_):
-                self._clearAllResults()
-
-    def _onExpressionFocus(self, _) -> None:
-        self.expressionTextFieldFocused = True
-
-    def _onExpressionBlur(self, _) -> None:
-        self.expressionTextFieldFocused = False
+    def _onKey(self, ev: ft.KeyboardEvent):
+        if ev.key == "Escape":
+            if (self.appLayout.expressionTextField.current.value != "")\
+                    or (not self.appLayout.expressionTextFieldFocused):
+                self.appLayout.resetInput()
+            else:
+                self.page.window_close()

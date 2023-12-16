@@ -74,9 +74,6 @@ class ExpressionEvaluator:
     _safeTokenDict['max'] = max
     _safeTokenDict['round'] = round
 
-    def __init__(self) -> None:
-        pass
-
     def eval(self, expression: str) -> ut.Result:
         result: ut.Result
         try:
