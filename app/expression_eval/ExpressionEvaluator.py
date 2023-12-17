@@ -1,4 +1,4 @@
-from math import *  # noqa: E501, F403, F401 # pyright: ignore[reportWildcardImportFromLibrary]
+from math import *  # pyright: ignore[reportWildcardImportFromLibrary]
 import utils as ut
 
 
@@ -74,8 +74,8 @@ class ExpressionEvaluator:
     _safeTokenDict['max'] = max
     _safeTokenDict['round'] = round
 
-    def eval(self, expression: str) -> ut.Result:
-        result: ut.Result
+    def eval(self, expression: str) -> ut.Result[float]:
+        result: ut.Result[float]
         try:
             result = ut.Success(
                 float(

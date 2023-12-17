@@ -1,16 +1,18 @@
+from abc import ABC
 import typing as tp
+from dataclasses import dataclass
 T = tp.TypeVar('T')
 
 
-class Result(tp.Generic[T]):
+class Result(ABC, tp.Generic[T]):
     pass
 
 
+@dataclass
 class Success(Result[T]):
-    def __init__(self, value: T):
-        self.value = value
+    value: T
 
 
+@dataclass
 class Failure(Result[T]):
-    def __init__(self, errorMessage: str):
-        self.errorMessage = errorMessage
+    errorMessage: str

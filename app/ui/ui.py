@@ -1,4 +1,4 @@
-import flet as ft
+import flet as ft  # pyright: ignore[reportMissingTypeStubs]
 from .App import App
 
 
@@ -7,4 +7,4 @@ def _main(page: ft.Page) -> None:
 
 
 def start() -> None:
-    ft.app(target=_main, assets_dir="ui/assets")
+    ft.app(target=_main, assets_dir="ui/assets")  # pyright: ignore[reportUnknownMemberType]
