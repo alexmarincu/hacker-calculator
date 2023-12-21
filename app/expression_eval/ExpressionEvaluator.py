@@ -70,9 +70,18 @@ class ExpressionEvaluator:
         [(k, globals().get(k, None)) for k in _safeTokenList]
     )
     _safeTokenDict['abs'] = abs
+    _safeTokenDict['int'] = int
     _safeTokenDict['min'] = min
     _safeTokenDict['max'] = max
     _safeTokenDict['round'] = round
+
+    @classmethod
+    def getFilteredTokens(cls, substr: str) -> list[str]:
+        return [
+            token
+            for token in cls._safeTokenDict.keys()
+            if token.startswith(substr)
+        ]
 
     def eval(self, expression: str) -> ut.Result[float]:
         result: ut.Result[float]
