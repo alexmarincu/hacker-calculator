@@ -34,3 +34,5 @@ class App():
                 self.appLayout.resetInput()
             else:
                 self.page.window_close()
+        elif ev.key == "Tab":
+            self.appLayout.onTab()
