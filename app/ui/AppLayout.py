@@ -71,7 +71,7 @@ class AppLayout(ft.Container):
                                     )
                                 ]
                             ),
-                            ft.Text(value="v0.2.0", size=10)
+                            ft.Text(value="v0.3.0", size=10)
                         ]
                     ),
                     ft.Column(
