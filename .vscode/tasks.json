@@ -24,7 +24,7 @@
                     " --icon app/ui/assets/icon.png",
                     " --add-data 'app/ui/assets:ui/assets'",
                     " --onedir",
-                    " && mv dist/HckrCalc/_internal/ui dist/HckrCalc/ui",
+                    " && mv dist/HckrCalc/_internal/ui dist/HckrCalc/ui"
                 ]
             },
             "windows": {
@@ -42,6 +42,40 @@
                     " --copyright 'Copyright (c) 2023 Alex Marincu'",
                     "; Move-Item -Path \"dist/HckrCalc/_internal/ui\"",
                     " -Destination \"dist/HckrCalc/ui\""
+                ]
+            },
+            "group": "build"
+        },
+        {
+            "label": "App: Build nuitka",
+            "linux": {
+                "command": [
+                    ". .pyvenv/bin/activate",
+                    " && ${command:python.interpreterPath} -m",
+                    " nuitka app/main.py",
+                    " --standalone",
+                    " --output-dir=build",
+                    " --output-filename=HckrCalc",
+                    " --linux-icon=app/ui/assets/icon.png",
+                    " --include-data-dir=app/ui/assets=ui/assets"
+                ]
+            },
+            "windows": {
+                "command": [
+                    ".pyvenv/Scripts/Activate.ps1",
+                    " ; ${command:python.interpreterPath} -m",
+                    " nuitka app/main.py",
+                    " --standalone",
+                    " --output-dir=build",
+                    " --output-filename=HckrCalc",
+                    " --windows-icon-from-ico=app/ui/assets/icon.png",
+                    " --include-data-dir=app/ui/assets=ui/assets",
+                    " --disable-console",
+                    " --file-description='${config:appName}'",
+                    " --file-version='${config:appVersion}'",
+                    " --product-name='${config:appName}'",
+                    " --product-version='${config:appVersion}'",
+                    " --copyright='Copyright (c) 2023 Alex Marincu'"
                 ]
             },
             "group": "build"
@@ -65,6 +99,25 @@
                 "${command:python.interpreterPath}",
                 " -m pip install -r requirements.txt"
             ]
+        },
+        {
+            "label": "Python venv: Upgrade requirements",
+            "command": [
+                "${command:python.interpreterPath}",
+                " -m pip install -r requirements.txt"
+            ],
+            "linux": {
+                "command": [
+                    ". .pyvenv/bin/activate",
+                    " && upgrade-requirements"
+                ]
+            },
+            "windows": {
+                "command": [
+                    ".pyvenv/Scripts/Activate.ps1",
+                    " ; upgrade-requirements"
+                ]
+            }
         }
     ]
 }
