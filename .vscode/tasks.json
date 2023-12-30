@@ -24,7 +24,7 @@
                     " --icon app/ui/assets/icon.png",
                     " --add-data 'app/ui/assets:ui/assets'",
                     " --onedir",
-                    " && mv dist/HckrCalc/_internal/ui dist/HckrCalc/ui",
+                    " && mv dist/HckrCalc/_internal/ui dist/HckrCalc/ui"
                 ]
             },
             "windows": {
@@ -65,6 +65,25 @@
                 "${command:python.interpreterPath}",
                 " -m pip install -r requirements.txt"
             ]
+        },
+        {
+            "label": "Python venv: Upgrade requirements",
+            "command": [
+                "${command:python.interpreterPath}",
+                " -m pip install -r requirements.txt"
+            ],
+            "linux": {
+                "command": [
+                    ". .pyvenv/bin/activate",
+                    " && upgrade-requirements"
+                ]
+            },
+            "windows": {
+                "command": [
+                    ".pyvenv/Scripts/Activate.ps1",
+                    " ; upgrade-requirements"
+                ]
+            }
         }
     ]
 }
